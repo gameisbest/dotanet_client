@@ -42,6 +42,8 @@ public class GameUI : MonoBehaviour {
 
     protected double LastShowNoticeTime;//上次显示提示的时间
 
+    protected bool IsShowAll;//是否显示所有
+
     static GameUI sInstanse = null;
     void Start () {
         //Debug.Log("gameui:" + Input.multiTouchEnabled + "  " + Input.touchSupported+"  "+ Input.stylusTouchSupported);
@@ -88,15 +90,12 @@ public class GameUI : MonoBehaviour {
 
 
         //显示隐藏组队界面按钮
-        ShowOffBtn = mainUI.GetChild("showoffbtn1").asButton;
-        //ShowOffBtn.selected = false;
-        ShowOffBtn.onClick.Add((EventContext context) => {
-            //ShowOffBtn.selected = true;
-            TeamInfo.visible = !TeamInfo.visible;
-            //if(TeamInfo.visible)
-            //TeamInfoShow(ShowOffBtn.selected);
-            Debug.Log("-----------ShowOffBtn:" + TeamInfo.visible);
-        });
+        //ShowOffBtn = mainUI.GetChild("showoffbtn1").asButton;
+        //ShowOffBtn.visible = false;//注销组队功能
+        //ShowOffBtn.onClick.Add((EventContext context) => {
+        //    TeamInfo.visible = !TeamInfo.visible;
+        //    Debug.Log("-----------ShowOffBtn:" + TeamInfo.visible);
+        //});
 
         //聊天信息
         LittleChat = mainUI.GetChild("littlechat").asCom;
@@ -145,10 +144,9 @@ public class GameUI : MonoBehaviour {
             //SceneManager.LoadScene(0);
             new StoreInfo();
         });
-        //聊天
-        LittleMapCom.GetChild("chat").asButton.onClick.Add(() =>
+        //邮件
+        LittleMapCom.GetChild("mail").asButton.onClick.Add(() =>
         {
-            //ChatUI.SOpenChatBox("zonghe", "", 0);
             Mails.SOpen();
             return;
         });
@@ -167,6 +165,19 @@ public class GameUI : MonoBehaviour {
         LittleMapCom.GetChild("guild").asButton.onClick.Add(() =>
         {
             new GuildInfo();
+        });
+
+        //活动地图
+        LittleMapCom.GetChild("activitymap").asButton.onClick.Add(() =>
+        {
+            new ActivityMap();
+        });
+
+        //显示所有
+        ShowAllBtn(false);
+        LittleMapCom.GetChild("showbtn").asButton.onClick.Add(() =>
+        {
+            ShowAllBtn(!IsShowAll);
         });
 
         //屏幕点击
@@ -206,6 +217,31 @@ public class GameUI : MonoBehaviour {
         MsgManager.Instance.RemoveListener("SC_NoticeWords");
         MsgManager.Instance.RemoveListener("SC_RequestTeam");
         MsgManager.Instance.RemoveListener("CC_Disconnect");
+    }
+    //显示所有按钮
+    public void ShowAllBtn(bool show)
+    {
+        IsShowAll = show;
+        if (IsShowAll)
+        {
+            LittleMapCom.GetChild("set_btn").visible = true;
+            LittleMapCom.GetChild("store").visible = true;
+            LittleMapCom.GetChild("mail").visible = true;
+            LittleMapCom.GetChild("friend").visible = true;
+            LittleMapCom.GetChild("exchange").visible = true;
+            LittleMapCom.GetChild("guild").visible = true;
+            LittleMapCom.GetChild("activitymap").visible = true;
+        }
+        else
+        {
+            LittleMapCom.GetChild("set_btn").visible = false;
+            LittleMapCom.GetChild("store").visible = false;
+            LittleMapCom.GetChild("mail").visible = false;
+            LittleMapCom.GetChild("friend").visible = false;
+            LittleMapCom.GetChild("exchange").visible = false;
+            LittleMapCom.GetChild("guild").visible = false;
+            LittleMapCom.GetChild("activitymap").visible = false;
+        }
     }
 
     //添加聊天信息
@@ -487,6 +523,7 @@ public class GameUI : MonoBehaviour {
     protected void TeamInfoShow(bool isshow)
     {
         TeamInfo.visible = isshow;
+        TeamInfo.visible = false;//注销组队功能
     }
 
     //更新组队信息
@@ -692,7 +729,7 @@ public class GameUI : MonoBehaviour {
         }
     }
 
-    public Vector2[] ItemSkillPos =
+    public Vector2[] ItemSkillPos1 =
     {
         new Vector2(780-1109,624-579),
         new Vector2(680-1109,624-579),
@@ -700,6 +737,7 @@ public class GameUI : MonoBehaviour {
         new Vector2(480-1109,624-579),
         new Vector2(380-1109,624-579),
         new Vector2(280-1109,624-579),
+        new Vector2(980-1109+20,624-579+20), //回城券位置
     };
     public Dictionary<int, Skillstick> ItemSkillCom;
     //刷新道具技能显示FreshItemSkill(data.ISD);
@@ -730,16 +768,30 @@ public class GameUI : MonoBehaviour {
             if (ItemSkillCom.ContainsKey(item.TypeID))
             {
                 ItemSkillCom[item.TypeID].SkillDatas = item;
-                ItemSkillCom[item.TypeID].SetXY(ItemSkillPos[index]);
+                
+                if (item.Index == 7)
+                {
+                    ItemSkillCom[item.TypeID].SetXY(ItemSkillPos1[6]);
+                }
+                else
+                {
+                    ItemSkillCom[item.TypeID].SetXY(ItemSkillPos1[index]);
+                }
+                
             }
             else
             {
+                Debug.Log("  len:" + ItemSkillPos1.Length);
                 GComponent view = UIPackage.CreateObject("GameUI", "Skillstick").asCom;
                 //GRoot.inst.AddChild(view);
                 mainUI.GetChild("attack").asCom.AddChild(view);
                 if (index < 6)
                 {
-                    view.xy = ItemSkillPos[index];
+                    view.xy = ItemSkillPos1[index];
+                }
+                if (item.Index == 7)
+                {
+                    view.xy = ItemSkillPos1[6];
                 }
                 ItemSkillCom[item.TypeID] = new Skillstick(view,true);
                 ItemSkillCom[item.TypeID].SkillDatas = item;

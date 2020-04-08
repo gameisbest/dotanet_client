@@ -205,13 +205,37 @@ MonoBehaviour:
     AnimName: warning
     Pos: 1
   - TypeID: 31
-    Words: "\u6743\u9650\u4E0D\u591F"
+    Words: "\u6CA1\u6709\u8BE5\u6743\u9650"
     Sound: sound/other/warning
     Type: 1
     AnimName: warning
     Pos: 1
   - TypeID: 32
     Words: "\u5BF9\u65B9\u5DF2\u7ECF\u6709\u516C\u4F1A\u4E86"
+    Sound: sound/other/warning
+    Type: 1
+    AnimName: warning
+    Pos: 1
+  - TypeID: 33
+    Words: "\u672A\u627E\u5230\u8BE5\u7269\u54C1"
+    Sound: sound/other/warning
+    Type: 1
+    AnimName: warning
+    Pos: 1
+  - TypeID: 34
+    Words: "\u62A5\u4EF7\u4F4E\u4E8E\u5F53\u524D\u4EF7\u683C"
+    Sound: sound/other/warning
+    Type: 1
+    AnimName: warning
+    Pos: 1
+  - TypeID: 35
+    Words: "\u65F6\u95F4\u4E0D\u5BF9\u6216\u8005\u516C\u4F1A\u7B49\u7EA7\u4E0D\u591F,\u65E0\u6CD5\u8FDB\u5165\u8BE5\u5730\u56FE"
+    Sound: sound/other/warning
+    Type: 1
+    AnimName: warning
+    Pos: 1
+  - TypeID: 36
+    Words: "\u6B64\u5730\u56FE\u4E0D\u652F\u6301\u66F4\u6362\u88C5\u5907,\u8BF7\u56DE\u57CE\u66F4\u6362!"
     Sound: sound/other/warning
     Type: 1
     AnimName: warning

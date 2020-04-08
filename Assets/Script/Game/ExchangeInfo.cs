@@ -16,6 +16,7 @@ public class ExchangeInfo
         MsgManager.Instance.AddListener("SC_GetExchangeShortCommoditys", new HandleMsg(this.SC_GetExchangeShortCommoditys));
         MsgManager.Instance.AddListener("SC_GetExchangeDetailedCommoditys", new HandleMsg(this.SC_GetExchangeDetailedCommoditys));
         MsgManager.Instance.AddListener("SC_GetSellUIInfo", new HandleMsg(this.SC_GetSellUIInfo));
+        
         //获取数据
         Protomsg.CS_GetExchangeShortCommoditys msg1 = new Protomsg.CS_GetExchangeShortCommoditys();
         MyKcp.Instance.SendMsg(GameScene.Singleton.m_ServerName, "CS_GetExchangeShortCommoditys", msg1);
@@ -163,7 +164,7 @@ public class ExchangeInfo
             onedropitem.GetChild("price").asTextField.text = item.CommodityData.Price + "";
             onedropitem.GetChild("level").asTextField.text = item.CommodityData.Level + "";
             onedropitem.GetChild("pricetype").asLoader.url = Tool.GetPriceTypeIcon(item.CommodityData.PriceType);
-            onedropitem.onClick.Add(() =>
+            onedropitem.GetChild("n2").onClick.Add(() =>
             {
                 //购买
                 var sellwindow = UIPackage.CreateObject("GameUI", "exchangebuy").asCom;
@@ -192,6 +193,11 @@ public class ExchangeInfo
         }
         return true;
     }
+
+    //
+
+    
+
     public bool SC_GetSellUIInfo(Protomsg.MsgBase d1)
     {
         Debug.Log("SC_GetSellUIInfo:");
@@ -364,6 +370,7 @@ public class ExchangeInfo
         MsgManager.Instance.RemoveListener("SC_GetExchangeShortCommoditys");
         MsgManager.Instance.RemoveListener("SC_GetExchangeDetailedCommoditys"); 
         MsgManager.Instance.RemoveListener("SC_GetSellUIInfo");
+        
         AudioManager.Am.Play2DSound(AudioManager.Sound_CloseUI);
         if (main != null)
         {
